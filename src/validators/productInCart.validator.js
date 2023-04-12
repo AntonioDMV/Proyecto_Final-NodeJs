@@ -1,0 +1,83 @@
+const { check } = require("express-validator");
+const validationResults = require("../utils/validate");
+
+const createProductIncar = [
+    check("cartId")
+        .exists()
+        .withMessage('cartId must exist')
+        .notEmpty()
+        .withMessage('cartId must bot be empty')
+        .isInt()
+        .withMessage('cartId must be an integer'),
+    check('productId')
+        .exists()
+        .withMessage('productId must exist')
+        .notEmpty()
+        .withMessage('productId must bot be empty')
+        .isInt()
+        .withMessage('productId must be an integer'),
+    check('quantity')
+        .exists()
+        .withMessage('productsId must exist')
+        .notEmpty()
+        .withMessage('productsId must bot be empty')
+        .isInt()
+        .withMessage('productsId must be an integer'),
+    check('price')
+        .exists()
+        .withMessage('price must exist')
+        .notEmpty()
+        .withMessage('price must bot be empty')
+        .isFloat()
+        .withMessage('price must be float'),
+    // check('isAvailable')
+    //     .exists()
+    //     .withMessage('isAvailable must exist')
+    //     .notEmpty()
+    //     .withMessage('isAvailable must bot be empty')
+    //     .isBoolean()
+    //     .withMessage('isAvailable must be a Boolean'),
+    (req, res, next) => {
+        validationResults(req, res, next)
+    }
+
+]
+
+const updateProductInCar = [
+    check('productId')
+        .exists()
+        .withMessage('productId must exist')
+        .notEmpty()
+        .withMessage('productId must bot be empty')
+        .isInt()
+        .withMessage('productId must be an integer'),
+    check('quantity')
+        .exists()
+        .withMessage('quantity must exist')
+        .notEmpty()
+        .withMessage('quantity must bot be empty')
+        .isInt()
+        .withMessage('quantity must be an integer'),
+    check('price')
+        .exists()
+        .withMessage('price must exist')
+        .notEmpty()
+        .withMessage('price must bot be empty')
+        .isFloat()
+        .withMessage('price must be float'),
+    // check('isAvailable')
+    //     .exists()
+    //     .withMessage('isAvailable must exist')
+    //     .notEmpty()
+    //     .withMessage('isAvailable must bot be empty')
+    //     .isBoolean()
+    //     .withMessage('isAvailable must be a Boolean'),
+    (req, res, next) => {
+        validatquantity(req, res, next)
+    }
+]
+
+module.exports = {
+    createProductIncar,
+    updateProductInCar
+}

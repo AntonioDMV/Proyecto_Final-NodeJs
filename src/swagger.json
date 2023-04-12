@@ -1,0 +1,718 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "E-commerce Api",
+        "description": "Una api para tengas la facilidad de contruir un E-commerce con carrito incluido",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Traer a todos los usuarios",
+                "description": "Con este endpoint podras traer todos los usuarios",
+                "requestBody": {
+                    "description": "Los campos que que se necesitan son la ruta",
+                    "required": true
+                }
+            }
+        },
+        "/api/v1/user": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Crea a un usuario",
+                "description": "Este endpoint esta creado para poder crear a un usuario",
+                "requestBody": {
+                    "description": "Los campos que necesitas para crear un nuevo usuario son: username, email, password, avatar(no obligatorio)",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "created"
+                    },
+                    "409": {
+                        "description": "conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Database connection error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/{id}": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Actuliza el username de un usuario",
+                "description": "Para actualizar el username del usuario debes mandar en el body el: username, como ruta mandar el id del usuario",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "El id usuario que se va a actualizar"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Los campos que se necesitan para actualizar el usurio es: username",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/updateUser"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "409": {
+                        "description": "conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Database connection error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/avatar/{id}": {
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Actualiza tu avatar",
+                "description": "Para que actualizar el avatar del usuario debes mandar en el body : avatar y como ruta el id del usuario que quieres actualizar",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": false,
+                        "description": "El id del usuario al que se le quiere actualizar el avatar"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Los campos requeridos para actualizar el avatar es: avatar",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/updateAvatar"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    }
+                }
+            }
+        },
+        "api/v1/auth/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Endpoint para el login",
+                "description": "Este endpoint permite loguearte",
+                "requestBody": {
+                    "description": "Los campos que se necesitan para loguearse son: email y password. La contraseña necesita tener al menos 7 caracteres",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/loguearse"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "409": {
+                        "description": "conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Database connection error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "status": {
+                                            "type": "integer",
+                                            "example": 400
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "la contraseña o el email estan incorrectos"
+                                        },
+                                        "error": {
+                                            "type": "string",
+                                            "example": "la contraseña o el email invalidos"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/product": {
+            "get": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Trae todos los productos",
+                "description": "Este endpoint me ayuda a traer todos los productos",
+                "requestBody": {
+                    "description": "Los campos  que se necesitan son la ruta",
+                    "required": true
+                }
+            }
+        },
+        "/api/v1/products": {
+            "post": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Crear un nuevo producto",
+                "description": "Podras crear un nuevo producto",
+                "requestBody": {
+                    "description": "Los campos que necesitan para crear un producto son: name, description, price, availableQty, isAvailable, userId, productImage",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createProduct"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "created"
+                    },
+                    "409": {
+                        "description": "conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Database connection error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/products/{id}": {
+            "put": {
+                "tags": [
+                    "Products"
+                ],
+                "summary": "Actualizar el producto",
+                "description": "Este endpoint te permite actualizar los productos",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "Ncesito el id del usuario que se va a actualizar"
+                    }
+                ],
+                "requestBody": {
+                    "description": "Los campos que se necesitan son: name, description, availableQty, isAvailable, productImage.",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/updateProduct"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "409": {
+                        "description": "conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Database connection error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/order": {
+            "get": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Traer todas las ordenes",
+                "description": "Este endPoint trae todas las ordenes",
+                "requestBody": {
+                    "description": "Los campos que que se necesitan son la ruta",
+                    "required": true
+                }
+            }
+        },
+        "/api/v1/orders": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Crear una orden",
+                "description": "Este endpoint nos ayuda a poder crear una orden",
+                "requestBody": {
+                    "description": "Los campos que necesitamos para crear son : usersId, isAvailable",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createOrders"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "created"
+                    },
+                    "409": {
+                        "description": "conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Database connection error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/orders/add": {
+            "post": {
+                "tags": [
+                    "Orders"
+                ],
+                "summary": "Agrega productos a la orden",
+                "description": "Este endPoint te permite agragar productos a la orden",
+                "requestBody": {
+                    "description": "Para este endpoint que agrega productos al carrito los campos que voy a necesitar son: orderId, productId, quantity, price, isAvailable",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/addOrder"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "409": {
+                        "description": "conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Database connection error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/cart/{idUsePro}": {
+            "get": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Trae los productos del carrido",
+                "description": "Trae el carrito incluyento el usuario , el producto de la tabla productsInCar, la cantidad y precio ",
+                "parameters": [
+                    {
+                        "name": "idUsePro",
+                        "in": "path",
+                        "required": true,
+                        "description": "Obtener el carrito con ayuda de una idUsePro"
+                    }
+                ]
+            }
+        },
+        "/api/v1/cart": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Crea el carrito",
+                "description": "Crea el carrito",
+                "required": true,
+                "requestBody": {
+                    "description": "Los campos que se necesitan para crea el carrito son: userId",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/createCart"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "created"
+                    },
+                    "409": {
+                        "description": "conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Database connection error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/cart/add": {
+            "post": {
+                "tags": [
+                    "Cart"
+                ],
+                "summary": "Agrega productos al carrito",
+                "description": "Con este endpoint vas a poder agregar cualquier producto a tu carrito",
+                "required":true,
+                "requestBody": {
+                    "description": "Los campos requiridos para agregar un producto al carrito son: carId, productsId, quantity, price, IsAvailable ",
+                    "content": {
+                        "application/json":{
+                            "schema": {
+                                "$ref": "#/components/schemas/addToCart"
+                            }
+                        }
+                    }
+                },
+                "responses":{
+                    "409": {
+                        "description": "conflict",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {
+                                            "type": "string",
+                                            "example": "Validation error"
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Database connection error"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "login": {
+                "description": "la contraseña debe tener al menos 7 caracteres, al igual que el username",
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "example": "AntonioMV"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "AntonioMV@gmail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "1234567"
+                    }
+                }
+            },
+            "updateUser": {
+                "type": "object",
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "example": "Antonio-DMV"
+                    }
+                }
+            },
+            "updateAvatar": {
+                "type": "object",
+                "properties": {
+                    "avatar": {
+                        "type": "string",
+                        "example": "photo.png"
+                    }
+                }
+            },
+            "loguearse": {
+                "type": "object",
+                "properties": {
+                    "email": {
+                        "type": "string",
+                        "example": "AntonioMV@gmail.com"
+                    },
+                    "password": {
+                        "type": "string",
+                        "example": "1234567"
+                    }
+                }
+            },
+            "createProduct": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Monitor"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "El mejor Monitor del mercado"
+                    },
+                    "price": {
+                        "type": "float",
+                        "example": 1999.99
+                    },
+                    "availableQty": {
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "isAvailable": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "userId": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "productImage": {
+                        "type": "string",
+                        "example": "https://cdn.shopify.com/s/files/1/0516/1713/6830/products/X340PRO_AngleRight_1024x1024.png?v=1666363216"
+                    }
+                }
+            },
+            "updateProduct": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "Monitor"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "La mejor Monitor del mercado"
+                    },
+                    "availableQty": {
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "productImage": {
+                        "type": "string",
+                        "example": "https://cdn.shopify.com/s/files/1/0516/1713/6830/products/X340PRO_AngleRight_1024x1024.png?v=1666363216"
+                    }
+                }
+            },
+            "createOrders": {
+                "type": "object",
+                "properties": {
+                    "usersId": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "status": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                }
+            },
+            "addOrder": {
+                "type": "object",
+                "properties": {
+                    "orderId": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "productId": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "quantity": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "price": {
+                        "type": "integer",
+                        "example": 3999.99
+                    },
+                    "isAvailable": {
+                        "type": "boolean",
+                        "example": true
+                    }
+                }
+            },
+            "createCart": {
+                "type": "object",
+                "properties": {
+                    "idUser": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                }
+            },
+            "addToCart": {
+                "type":"object",
+                "properties":{
+                    "cartId": {
+                        "type":"integer",
+                        "example": 1
+                    },
+                    "productId": {
+                        "type":"integer",
+                        "example": 2
+                    },
+                    "quantity":{
+                        "type":"integer",
+                        "example": 1
+                    },
+                    "price": {
+                        "type":"float",
+                        "example": 1199.99
+                    },
+                    "isAvailable": {
+                        "type":"boolean",
+                        "example": true
+                    }
+                }
+            }
+        }
+    }
+}
